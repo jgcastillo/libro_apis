@@ -30,3 +30,17 @@
 :pdf-fontsdir: {docdir}/fonts
 :pdf-theme: basic
 :pdfmark: true
+
+[preface]
+include::chapters/preface.adoc[]
+
+= Introducción
+include::chapters/introduction.adoc[]
+
+= Primera Parte: Fundamentos de Python para APIs
+include::chapters/part1/chapter1/chapter1.adoc[]
+
+
+include::chapters/bibliography.adoc[]
+
+

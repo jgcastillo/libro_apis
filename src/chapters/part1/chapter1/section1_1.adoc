@@ -1,0 +1,3 @@
+=== Introducción a los métodos mágicos (dunder)
+
+Aqui va un contenido
