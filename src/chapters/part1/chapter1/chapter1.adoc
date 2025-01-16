@@ -1,8 +1,8 @@
 == Funciones Dunder: Personalizando el comportamiento de las clases
 
-En el paradigma de la Programación Orientada a Objetos (POO), las interacción entre objetos y las operaciones que se realizan sobre ellos es un aspecto fundamental. Python se distingue por su flexibilidad y capacidad para abstraerconceptos complejos a través de mecanismos intuitivos. En este sentido, Python proporciona un mecanismo poderoso y flexible para definir el comportamiento de los objetos ante diversas operaciones: los métodos dunder, también conocidoos como métodos mágicos o métodos especiales. EL nombre de estos métodos se deriva de la palabra "dunder" que es una contracción de "double underscore" (doble guión bajo), ya que todos estos métodos comienzan y terminan con dos guiones bajos, como `\__init__`, `\__str__`, `\__add__`, entre otros.
+En el paradigma de la Programación Orientada a Objetos (POO), las interacción entre objetos y las operaciones que se realizan sobre ellos es un aspecto fundamental. Python se distingue por su flexibilidad y capacidad para abstraerconceptos complejos a través de mecanismos intuitivos. En este sentido, Python proporciona un mecanismo poderoso y flexible para definir el comportamiento de los objetos ante diversas operaciones: los métodos dunder, también conocidoos como métodos mágicos o métodos especiales. EL nombre de estos métodos se deriva de la palabra "dunder" que es una contracción de "double underscore" (doble guión bajo), ya que todos estos métodos comienzan y terminan con dos guiones bajos, como `\___init___`, `\___str___`, `\___add___`, entre otros.
 
-En otros lenguajes de programación se hace uso de la sobrecarga de operadores mediante palabras específicas o convenciones sintácticas complejas, sin embargo Python ofrece un enfoque más limpio y consistente a través de los métodos dunder. Mientras que lenguajes como Java demandan la implementación de métodos específicos para definir comparación de objetos, Python simplifica el proceso a través del método `\__eq__`, y así como esté método hay forma de sobreescribir diversas operaciones. Esta uniformidad simplica la sintaxis y facilita la lectura y comprensión dl código
+En otros lenguajes de programación se hace uso de la sobrecarga de operadores mediante palabras específicas o convenciones sintácticas complejas, sin embargo Python ofrece un enfoque más limpio y consistente a través de los métodos dunder. Mientras que lenguajes como Java demandan la implementación de métodos específicos para definir comparación de objetos, Python simplifica el proceso a través del método `\___eq___`, y así como esté método hay forma de sobreescribir diversas operaciones. Esta uniformidad simplica la sintaxis y facilita la lectura y comprensión dl código
 
 La existencia de los métodos dunder ofrece numerosas ventajas en el desarrollo de software con Python. Entre las principales se destacan:
 
@@ -16,5 +16,8 @@ La existencia de los métodos dunder ofrece numerosas ventajas en el desarrollo 
 
 El diseño de Python, influenciado por principios como el "Zen de Python" (Peters, 2004), subraya la importancia de la simplicidad y la legibilidad. La inclusión de métodos mágicos se alinea con estas filosofías al ofrecer un sistema unificado y predecible para personalizar el comportamiento de los objetos sin sacrificar la claridad del código. Esto no solo agiliza el desarrollo, sino que también reduce la carga cognitiva del programador al interactuar con bibliotecas externas o proyectos de terceros que aprovechan esta funcionalidad.
 
+En este capítulo se apreciará l apotencia de los métodos dunder y como facilitan el desarrollo de applicaciones más limpias y de fácil matenimiento.
+
 
 include::section1_1.adoc[]
+include::section1_2.adoc[]

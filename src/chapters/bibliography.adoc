@@ -1,9 +1,9 @@
-== Bibliografía
+:!sectids:
 
-=== Libros
+== Libros y artículos
 kjhsdfkjdsf 
 
 
-=== Referencias web
+== Referencias web
 
 * Peters, T. (2004). The Zen of Python. Disponible en: https://peps.python.org/pep-0020/

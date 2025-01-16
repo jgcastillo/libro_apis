@@ -1,0 +1,164 @@
+=== Técnicas Avanzadas con Métodos Dunder
+
+Además de la sobrecarga de operadores aritméticos y de comparación, los métodos dunder tienen otras aplicaciones importantes, algunas de ellas más complejas, que extienden significativamente la flexibilidad y el poder de Python. A continuación, se describen algunos de estos casos:
+
+*1. Control de Atributos y encapsulación*
+
+Los métodos dunder permiten personalizar cómo se accede, modifica y elimina un atributo de una clase. Esto se logra principalmente con:
+
+* `\___getattr___`: Invocado cuando un atributo no se encuentra en la instancia.
+* `\___setattr___`: Permite controlar cómo se establece el valor de un atributo.
+* `\___delattr___`: Se usa para manejar la eliminación de atributos.
+* `\___dir___`: Personaliza la lista de atributos retornada por dir().
+
+Un caso típico es cuando se necesita validar valores al asignarlos a un atributo o realizar cálculos dinámicos al acceder a ellos.
+
+[source, python, linenums]
+:snippetFilename: Ejemplo 3. Uso de los métodos dunder para control de atributos
+.{snippetFilename}
+----
+class Point:
+    def __init__(self, x, y):
+        self._x = x
+        self._y = y
+
+    def __getattr__(self, name):
+        if name == "distance_from_origen":
+            return (self._x**2 + self._y**2) ** 0.5
+        raise AttributeError(f"'{name}' no encontrado.")
+
+    def __setattr__(self, name, value):
+        if name == "_x" or name == "_y":
+            if not isinstance(value, (int, float)):
+                raise ValueError("Las coordenadas deben ser numéricas.")
+        super().__setattr__(name, value)
+
+# Uso
+p = Punto(3, 4)
+print(p.distance_from_origen)  # Salida: 5.0
+----
+Observe como los atributos `\_x` y `_y` son de acceso `protected`, al hacer uso de los métodos `\___getattr___` y `\___setattr___` en la clase `Point`, encapsulan el cálculo de la distancia desde el origen, a la vez que validan que sean del tipo correcto.
+
+*2. Implementación de protocolos y estructuras estándar*
+
+Los métodos dunder permiten que una clase cumpla con protocolos específicos, como los necesarios para que un objeto se comporte como una lista, un diccionario o un iterable.
+
+* `\__iter__` y `\__next__`: Convierte una clase en un iterable.
+* `\__getitem__`, `\__setitem__`, `\__delitem__`: Hacen que una clase se comporte como una lista o diccionario.
+* `\__contains__`: Define cómo verificar la pertenencia (in).
+
+En el siguiente ejemplo se observa el uso de estos métodos dunder.
+
+[source, python, linenums]
+:snippetFilename: Ejemplo 4. Uso de los métodos dunder para permitir que una clase se comporte como un iterable
+.{snippetFilename}
+----
+class Counter:
+    def __init__(self, limit):
+        self.limit = limit
+        self.current = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current < self.limit:
+            self.current += 1
+            return self.current
+        raise StopIteration
+
+# Uso
+for number in Counter(3):
+    print(number)  # Salida: 1, 2, 3
+----
+
+A este tipo de clases se les llama `iterables` porque son susceptibles de ser recoridas usando un lazo `for` o un `while`.
+
+*3. Manejo de Contextos (Context Managers):*
+
+Los _context managers_ permiten definir bloques de código que se ejecutan dentro de un contexto específico, asegurando la ejecución de ciertas acciones al entrar y salir del bloque, independientemente de si ocurren excepciones. Esto se logra mediante los métodos dunder `\___enter___` y `\___exit___`.
+
+* `\___enter___(self)`: Se ejecuta al entrar en el contexto (con la sentencia `with`). Debe retornar el recurso que se utilizará dentro del contexto.
+* `___exit___(self, exc_type, exc_val, exc_tb)`: Se ejecuta al salir del contexto. Recibe información sobre cualquier excepción que haya ocurrido dentro del bloque.
+
+[source, python, linenums]
+:snippetFilename: Ejemplo 5. Uso de los métodos dunder para permitir un _context manager_
+.{snippetFilename}
+----
+class MyFile:
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def __enter__(self):
+        self.file_name = open(self.file_name, 'w')
+        return self.file_name
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.file_name:
+            self.file_name.close()
+        if exc_type:
+            print(f"Ocurrió una excepción: {exc_val}")
+            return True # Suprime la excepción
+
+with MyFile("mi_file.txt") as f:
+    f.write("Hola, mundo!")
+    #raise Exception("Ocurrió un error") # Descomentar para probar el manejo de excepciones
+
+# El archivo se cierra automáticamente al salir del bloque 'with', incluso si hay una excepción.
+----
+
+*4. Metaprogramación y control avanzado de clases*
+Los métodos dunder permiten modificar el comportamiento de las clases mismas, no solo de las instancias. Esto incluye personalizar cómo se crean o representan las clases.
+
+* `\___new___`: Controla la creación de una instancia antes de su inicialización.
+* `\___call___`: Permite que una instancia sea llamada como si fuera una función.
+* `\___class___`: Cambia dinámicamente la clase de una instancia.
+
+[source, python, linenums]
+:snippetFilename: Ejemplo 6. Una clase invocable
+.{snippetFilename}
+----
+class Adder:
+    def __call__(self, x, y):
+        return x + y
+
+# Uso
+adder = Adder()
+print(adder(5, 7))  # Salida: 12
+----
+
+El método `\___new___` se diferencia de `\___init___` en que este último se encarga de la inicialización de la clase. `\___new___` es un método estático que recibe la clase como primer argumento `(cls)`. Este método es útil para implementar patrones como el Singleton.
+
+[source, python, linenums]
+:snippetFilename: Ejemplo 7. Un Singlelton
+.{snippetFilename}
+----
+class MySingletonClass:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self, value):
+        self.value = value
+
+a = MySingletonClass(10)
+b = MySingletonClass(20)
+
+print(a.value) # Imprime 20
+print(b.value) # Imprime 20 (ambas variables apuntan a la misma instance)
+print(a is b) # Imprime True
+----
+
+*5. Métodos para la Conversión de Tipos:*
+
+Los métodos dunder también se utilizan para definir la conversión de un objeto a otros tipos de datos:
+
+* `\___int___(self)`: Conversión a entero (int()).
+* `\___float___(self)`: Conversión a punto flotante (float()).
+* `\___complex___(self)`: Conversión a número complejo (complex()).
+* `\___bool___(self)`: Conversión a booleano (bool()).
+
+Estos son solo algunos ejemplos de las aplicaciones más avanzadas de los métodos dunder. Su uso adecuado permite crear clases más expresivas, flexibles y que se integran de manera más natural con el lenguaje Python. Al comprender estos mecanismos, se puede aprovechar al máximo el paradigma de la Programación Orientada a Objetos en Python y escribir código más eficiente y mantenible.

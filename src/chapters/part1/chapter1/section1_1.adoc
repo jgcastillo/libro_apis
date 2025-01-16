@@ -1,3 +1,115 @@
-=== Introducción a los métodos mágicos (dunder)
+=== Sobrecarga de Operadores y su Uso en el Diseño de Clases
 
-Aqui va un contenido
+La sobrecarga de operadores es una característica fundamental que permite redefinir el comportamiento de los operadores estándar para adaptarlos a las necesidades específicas de una clase.
+
+La flexibilidad ofrecida por los métodos dunder permite a los desarrolladores diseñar clases más intuitivas y expresivas, donde las operaciones entre instancias reflejan su intención lógica de manera clara. Por ejemplo, un vector puede sumar sus componentes al redefinir el operador `+`, y una fracción puede representarse como una cadena formateada mediante el método `\___str___`. Estas capacidades no solo mejoran la legibilidad del código, sino que también alinean las operaciones personalizadas con las convenciones del lenguaje.
+
+==== Métodos dunder por aplicación
+
+A continuación, se presenta una tabla con los principales métodos dunder agrupados según su aplicación:
+
+[cols="2,2,2", options="header"]
+|===
+| Aplicación | Métodos Dunder | Descripción
+
+| Inicialización y Destrucción | `\___init___(self, ...)` | Constructor de la clase. Se llama al crear una nueva instancia.
+|   |`\___del___(self)` | Destructor de la clase. Se llama cuando se elimina una instancia.
+
+| Representación de Objetos | `\___str___(self)` | Representación en cadena "informal" del objeto, legible para el usuario.
+|   |`\___repr___(self)` | Representación en cadena "formal" del objeto, útil para depuración y desarrollo.
+
+| Operadores Aritméticos | `\___add___(self, other)` | Suma (`+`).
+|   |`\___sub___(self, other)` | Resta (`-`).
+|   |`\___mul___(self, other)` | Multiplicación (`*`).
+|   |`\___truediv___(self, other)` | División (`/`).
+|   |`\___floordiv___(self, other)` | División entera (`//`).
+|   |`\___mod___(self, other)` | Módulo (`%`).
+|   |`\___pow___(self, other)` | Potencia (`**`).
+
+| Operadores de Comparación | `\___eq___(self, other)` | Igualdad (`==`).
+|   |`\___ne___(self, other)` | Desigualdad (`!=`).
+|   |`\___lt___(self, other)` | Menor que (`<`).
+|   |`\___gt___(self, other)` | Mayor que (`>`).
+|   |`\___le___(self, other)` | Menor o igual que (`<=`).
+|   |`\___ge___(self, other)` | Mayor o igual que (`>=`).
+
+| Operadores de Asignación Aumentada | `___iadd___(self, other)` | Suma y asignación (`+=`).
+|   |`\___isub___(self, other)` | Resta y asignación (`-=`).
+| Métodos para Contenedores | `___len___(self)` | Longitud del contenedor (`len()`).
+|   |`\___getitem___(self, key)` | Acceso a elementos por índice o clave (`[]`).
+|   |`\___setitem___(self, key, value)` | Asignación de valores a elementos (`[]=`).
+|   |`\___delitem___(self, key)` | Eliminación de elementos (`del`).
+|   |`\___iter___(self)` | Iterador del contenedor (`iter()`).
+|   |`\___contains___(self, item)` | Pertenencia (`in`).
+
+| Otros | `\___call___(self, ...)` | Permite llamar al objeto como una función.
+
+|===
+
+=== Ejemplos de Uso
+
+A continuación, se presentan ejemplos concretos de cómo se pueden utilizar algunos de estos métodos dunder para definir el comportamiento de clases personalizadas.
+
+[source,python,linenums]
+:snippetFilename: Ejemplo 1. El uso de varios métodos dunder
+.{snippetFilename}
+----
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+    def __add__(self, other):
+        if not isinstance(other, Vector):
+            raise TypeError("Operando debe ser un Vector")
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, scalar):
+      if not isinstance(scalar, (int, float)):
+        raise TypeError("El multiplicador debe ser un número")
+      return Vector(self.x * scalar, self.y * scalar)
+
+v1 = Vector(2, 3)
+v2 = Vector(4, 5)
+v3 = v1 + v2  # Llama a v1.__add__(v2)
+print(v3) # Imprime Vector(6, 8)
+
+v4 = v1 * 3
+print(v4) # Imprime Vector(6, 9)
+----
+
+En este ejemplo:
+
+* el método `\___add___` redefine el comportamiento del operador `+` para permitir la suma de dos instancias de la clase `Vector`. 
+* el método `\___mul___` redefine el comportamiento del operador `*` para permitir la multiplicación de una instancia de `Vector` por un escalar. 
+* Además, `\___repr___` proporciona una representación legible del objeto, útil para depuración.
+
+Otro caso práctico es el uso de métodos de comparación para establecer reglas específicas:
+
+[source,python,linenums]
+:snippetFilename: Ejemplo 2. Comparación de objetos con métodos dunder
+.{snippetFilename}
+----
+class Persona:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+
+    def __lt__(self, other):
+        if isinstance(other, Persona):
+            return self.edad < other.edad
+        raise TypeError("Unsupported operand type(s)")
+
+# Comparación de edades
+p1 = Persona("Ana", 25)
+p2 = Persona("Luis", 30)
+print(p1 < p2)  # Salida: True
+----
+
+En este caso, el método `\___lt___` (`<`) permite comparar dos objetos de tipo `Persona` basándose en su atributo `edad`.
+
+Estos ejemplos ilustran cómo la sobrecarga de operadores a través de los métodos dunder permite definir un comportamiento personalizado y más intuitivo para las clases, mejorando la legibilidad y la expresividad del código. En las siguientes secciones, se explorarán otros métodos dunder y sus aplicaciones en el diseño de clases más complejas.
+
