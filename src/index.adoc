@@ -1,0 +1,32 @@
+[separator=::]
+= Desarrollo de APIs con Python
+:author: José Gregorio Castillo Pacheco
+:creatot: {author}
+:copyright: 2025 {author}
+:email: jocastil@ucab.edu.ve
+:revnumber: v1.0
+:revdate: 15.01.2025
+:revremark: First draft
+:doctype: book
+:leveloffset: +1
+# :front-cover-image: image:cover.jpeg[width=1700,height=2800]
+:sectnums:
+:chapter-signifier: Capítulo
+:sectlinks:
+:toc: left
+:toclevels: 2
+:toc-title: Contenido
+:icons: font
+:figure-caption: Figura
+:table-caption: Tabla
+
+:source-highlighter: pygments
+:pygments-style: staroffice
+:pygments-linenums-mode: table
+:source-language: python
+
+:imagesdir: images
+:pdf-themesdir: {docdir}/themes
+:pdf-fontsdir: {docdir}/fonts
+:pdf-theme: basic
+:pdfmark: true
